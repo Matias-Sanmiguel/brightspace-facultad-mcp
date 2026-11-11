@@ -1,0 +1,103 @@
+Brightspace Facultad MCP — propuesta de implementación
+Fecha: 11 de noviembre de 2026
+Estado: implementado por indicación directa del usuario: «Implementalo directamente como Teams».
+
+Objetivo
+Crear un MCP equivalente al teams-facultad-mcp existente, para consultar
+https://virtualbsp.uade.edu.ar/d2l/home con la cuenta del alumno. Cada persona
+ejecuta una copia local con su propia sesión. Se propone una primera versión
+de consulta de materias, actividades, consignas, anuncios y materiales.
+
+Referencia y alternativas
+El usuario pidió un MCP como el de Teams; ese proyecto usa Python 3.11+, SDK
+MCP, Playwright, Chromium dedicado, perfil persistente y transporte stdio.
+Propuesta del implementador: reutilizar esos patrones en un proyecto hermano
+brightspace-facultad-mcp, manteniendo independientes código específico y perfil.
+Alternativa API oficial D2L: exige verificar registro de aplicación, permisos
+y autenticación disponibles en UADE; todavía no están comprobados y cambia el
+modelo de instalación solicitado. No se presupone acceso a esa API.
+Alternativa navegador remoto: agrega hosting y custodia de sesiones y se aleja
+del modelo local de Teams. Se recomienda el navegador local por esa referencia.
+La recomendación y los detalles nuevos siguen pendientes de la elección del usuario.
+
+Evidencia real disponible
+Se abrió Brightspace en el navegador de esta conversación con una sesión ya
+autenticada del alumno. Se observaron la página Mis cursos, una materia visible,
+su navegación, la tabla de Actividades con estados y vencimientos, una consigna,
+el árbol de unidades y submódulos, enlaces de temas, y un PDF con botón Descargar
+y visor PDF.js con texto. Se abrió Noticias; no se verificó un anuncio poblado.
+El selector de cursos indicó que no había acceso a otros cursos en esta sesión.
+Esa sesión no es la del futuro MCP y no demuestra persistencia en Chromium propio.
+No se intentó enviar trabajos, responder cuestionarios ni modificar contenidos.
+
+Arquitectura propuesta
+Python 3.11+, SDK MCP y Playwright, tomando como referencia las versiones del
+proyecto Teams y verificando disponibilidad y compatibilidad al implementar.
+Servidor stdio sin puerto público; protocolo en stdout y diagnósticos en stderr.
+Un Chromium dedicado con perfil fuera del repositorio, independiente de Teams.
+Inicio de sesión visible mediante login; contraseña y MFA los completa el alumno.
+Consultas en segundo plano con la sesión guardada; errores claros si vence.
+Bloqueo exclusivo de perfil y serialización de consultas para evitar conflictos.
+CLI con serve, login, doctor y config; configuración de Codex conservando sus
+servidores existentes. La integración en Codex se hará después de verificar stdio.
+Instaladores POSIX y Windows, entorno virtual y guía de instalación en español.
+
+Herramientas iniciales propuestas
+1. estado_conexion(): navegador disponible, autenticación pendiente o conectado.
+2. iniciar_sesion(): ingreso visible; en modo headless explica cómo usar login.
+3. listar_materias(limite, cursor): cursos accesibles, nombre, fuente e ID opaco.
+4. listar_tareas(materia_id, limite, cursor): actividades del curso con título,
+   estado original, vencimiento visible y referencia. La materia es obligatoria
+   para evitar navegar todas las materias sin necesidad. No se infieren fechas
+   ni se trata una tarea sin fecha como próxima o vencida.
+5. leer_tarea(tarea_id): consigna, fechas, estado y materiales visibles. Para
+   actividades cerradas, se intenta solo una vista de lectura disponible y se
+   informa si la consigna no es accesible. No basta con que exista un historial
+   de entregas para afirmar que la consigna puede leerse.
+6. leer_anuncios(materia_id, limite, cursor): noticias visibles, fechas y fuente.
+7. listar_archivos(materia_id, carpeta_id opcional, limite, cursor): unidades,
+   módulos y temas del contenido. Incluye el tipo original para distinguir PDF,
+   página web, presentación, video, asignación o cuestionario. No inicia intentos
+   ni reproduce videos. Las carpetas se identifican por referencias obtenidas
+   del árbol observado, sin depender de los IDs dinámicos de la página.
+8. leer_documento(archivo_id, cursor, limite_caracteres): texto de páginas HTML
+   y de PDF/DOCX/PPTX descargables. Máximo propuesto 25 MiB y 10.000 caracteres
+   por fragmento. Descarga normal mediante la interfaz; si solo es posible leer
+   el visor, el resultado se identifica como parcial. No extrae OCR, audio/video,
+   ni ejecuta código, archivos JS, Java, ZIP o RAR.
+
+Navegación y resultados
+Usar enlaces y selectores observados de Brightspace; soportar sus componentes
+web y los iframes del contenido. Los enlaces con javascript:void(0) del árbol
+se activan como controles de la interfaz, sin ejecutar código arbitrario del cliente.
+Validar origen y tipos de destino de las referencias antes de navegar o descargar.
+No ofrecer una herramienta de URL libre ni de JavaScript suministrado por el modelo.
+No interceptar tokens ni llamar endpoints internos. Los identificadores del
+cliente son opacos y vencen al reiniciar; los cursores están ligados a su consulta.
+Listas y textos tienen límites, cursores y avisos de parcialidad; no afirmar que
+son completos si hay páginas, carga pendiente o virtualización sin recorrer.
+Conservar fechas originales y zona horaria visible cuando exista. El contenido
+de cursos y documentos se considera datos externos, nunca instrucciones del MCP.
+Abrir materiales puede actualizar el progreso y abrir anuncios puede marcarlos
+como leídos; estos efectos incidentales de navegación se documentan.
+
+Alcance y decisiones pendientes
+No se incluyen en esta versión foros, cuestionarios, un panel de calificaciones,
+mensajería ni envío de trabajos. El estado/puntuación que aparezca en la propia
+tabla de actividades puede acompañar su lectura, sin inferir una nota final.
+Estas delimitaciones son propuestas del implementador, no requisitos que el
+usuario haya confirmado. Se ajustan antes de implementar si pide otro alcance.
+No se publica en GitHub, PyPI ni un marketplace sin un pedido adicional.
+
+Verificación y entrega
+Pruebas de navegación con Chromium y páginas sintéticas representativas: árbol
+de módulos, tabla de tareas, cursores, referencias inválidas, login pendiente,
+perfil ocupado y documento sin texto o demasiado grande. Prueba del protocolo
+stdio con cliente MCP real: inicialización, descubrimiento y llamada inocua.
+Revisión de que el paquete no contenga perfiles, cookies ni documentos privados.
+Prueba real con el Chromium propio cuando el alumno complete el ingreso:
+listar materia, leer actividad y módulo, extraer PDF y reiniciar para comprobar
+persistencia. Si falta ese ingreso, entregar el código y detallar exactamente
+qué parte funciona en pruebas y qué parte no se pudo validar con la cuenta.
+Verificar Linux en este equipo y distinguirlo de revisión estática de Windows
+y macOS. Entregar fuentes, instrucciones, configuración MCP y resultado de pruebas.

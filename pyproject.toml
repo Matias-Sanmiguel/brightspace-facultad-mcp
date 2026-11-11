@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling==1.33.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "brightspace-facultad-mcp"
+version = "0.1.0"
+description = "Consultas locales de Brightspace UADE mediante MCP y Chromium dedicado"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+  "anyio==4.16.0", "mcp==2.3.0", "playwright==1.65.0", "platformdirs==4.14.5",
+  "filelock==4.2.10", "python-docx==1.2.0", "python-pptx==1.0.2", "pypdf==7.0.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0", "pytest-asyncio==1.4.1.post1", "build==1.6.1"]
+
+[project.scripts]
+brightspace-facultad-mcp = "brightspace_facultad_mcp.cli:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/brightspace_facultad_mcp"]
