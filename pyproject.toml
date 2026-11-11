@@ -17,6 +17,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest==9.2.0", "pytest-asyncio==1.4.1.post1", "build==1.6.1"]
 
+[project.urls]
+Homepage = "https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp"
+Issues = "https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/issues"
+
 [project.scripts]
 brightspace-facultad-mcp = "brightspace_facultad_mcp.cli:main"
 

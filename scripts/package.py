@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def main():
     destination=ROOT/'dist'/'brightspace-facultad-mcp-0.1.0-source.zip'
     destination.parent.mkdir(exist_ok=True)
-    files=[ROOT/name for name in ['README.md','LICENSE','pyproject.toml','install.sh','install.ps1',
+    files=[ROOT/name for name in ['README.md','INSTALL_WITH_AI.md','.gitignore','LICENSE','pyproject.toml','install.sh','install.ps1',
                                  'requirements.lock','requirements-dev.lock','requirements-build.lock']]
     for folder in ['src','scripts','tests','docs']:
         files.extend(path for path in (ROOT/folder).rglob('*')

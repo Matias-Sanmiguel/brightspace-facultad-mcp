@@ -1,14 +1,31 @@
 # Brightspace Facultad MCP
 
+[![Tests](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/actions/workflows/tests.yml)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue)](https://www.python.org/downloads/)
+[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-green)](LICENSE)
+
 Consultá materias, actividades, consignas, noticias y materiales de
 [Brightspace UADE](https://virtualbsp.uade.edu.ar/d2l/home) desde un asistente MCP.
 Corre en tu computadora con tu cuenta y un Chromium dedicado, como
 [Teams Facultad MCP](https://github.com/Matias-Sanmiguel/teams-facultad-mcp),
 del que reutiliza infraestructura bajo licencia MIT.
 
+[Instalar con mi agente de IA](INSTALL_WITH_AI.md) · [Descargar la última versión](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/releases/latest) · [Reportar un problema](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/issues)
+
 ## Instalación
 
 Necesitás Python 3.11+, Internet y un cliente MCP con transporte stdio.
+
+Descargá `brightspace-facultad-mcp-0.1.0-source.zip` desde
+[Releases](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/releases/latest)
+y extraelo en una carpeta permanente. También podés clonar el repositorio:
+
+```sh
+git clone https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp.git
+cd brightspace-facultad-mcp
+```
+
+Abrí una terminal en esa carpeta y ejecutá los comandos de tu sistema:
 
 **Linux / macOS**
 
