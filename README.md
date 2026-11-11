@@ -12,6 +12,25 @@ del que reutiliza infraestructura bajo licencia MIT.
 
 [Instalar con mi agente de IA](INSTALL_WITH_AI.md) · [Descargar la última versión](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/releases/latest) · [Reportar un problema](https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp/issues)
 
+## Instalá con tu agente de IA
+
+Pegá este prompt en un agente con acceso a la terminal de tu computadora
+(por ejemplo, Codex, Claude Code o Cursor):
+
+```text
+Instalá y conectá el MCP local de este repositorio:
+https://github.com/Matias-Sanmiguel/brightspace-facultad-mcp
+Leé INSTALL_WITH_AI.md y seguí su prompt de instalación completo.
+USE AT YOUR OWN RISK: acepto usar este proyecto bajo mi propia responsabilidad.
+Prepará el entorno, ejecutá el instalador y configurá mi cliente MCP.
+Yo voy a completar el inicio de sesión de UADE y MFA en el navegador dedicado.
+Verificá el resultado y avisame si el cliente necesita reiniciarse.
+```
+
+El [prompt completo](INSTALL_WITH_AI.md) incluye instalación por sistema,
+conservación de la configuración existente y comprobación de la conexión.
+Cada persona instala su copia e inicia sesión con su propia cuenta.
+
 ## Instalación
 
 Necesitás Python 3.11+, Internet y un cliente MCP con transporte stdio.
